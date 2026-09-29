@@ -1,0 +1,148 @@
+{
+  "title": "Awesome Agent Sandboxes",
+  "subtitle": "Choose where your agent runs its tools.",
+  "description": "Execution sandboxes, browser environments, and isolation runtimes for AI agents.",
+  "scope": "Environments for running agent tools or untrusted code, plus the isolation runtimes used to build them. Browser automation libraries alone are excluded. A listing is not a security certification.",
+  "questions": [
+    "What isolation boundary is used: process restrictions, containers, an application kernel, or a VM?",
+    "How are network access, credentials, filesystem access, and resource limits controlled?",
+    "Does state persist, and can you inspect, stop, snapshot, or destroy an environment?"
+  ],
+  "sections": [
+    {
+      "title": "Agent execution platforms",
+      "projects": [
+        {
+          "name": "Cloudflare Sandbox SDK",
+          "url": "https://github.com/cloudflare/sandbox-sdk",
+          "description": "SDK for executing commands and managing files in isolated containers from Workers applications.",
+          "kind": "Cloud platform SDK",
+          "source": "https://github.com/cloudflare/sandbox-sdk#readme",
+          "checked": "2026-09-29"
+        },
+        {
+          "name": "Daytona",
+          "url": "https://github.com/daytonaio/daytona",
+          "description": "Sandbox infrastructure with SDK and API access to code execution, files, and processes.",
+          "kind": "Sandbox platform",
+          "source": "https://github.com/daytonaio/daytona#readme",
+          "checked": "2026-09-29"
+        },
+        {
+          "name": "E2B",
+          "url": "https://github.com/e2b-dev/E2B",
+          "description": "Cloud sandbox infrastructure with Python and JavaScript SDKs for running agent-generated code.",
+          "kind": "Cloud sandbox",
+          "source": "https://github.com/e2b-dev/E2B#readme",
+          "checked": "2026-09-29"
+        },
+        {
+          "name": "OpenSandbox",
+          "url": "https://github.com/opensandbox-group/OpenSandbox",
+          "description": "Sandbox platform with lifecycle and execution APIs for Docker and Kubernetes environments.",
+          "kind": "Deployable platform",
+          "source": "https://github.com/opensandbox-group/OpenSandbox#readme",
+          "checked": "2026-09-29"
+        },
+        {
+          "name": "Vercel Sandbox",
+          "url": "https://github.com/vercel/sandbox",
+          "description": "SDK and tooling for ephemeral compute environments that run user-generated code.",
+          "kind": "Cloud sandbox",
+          "source": "https://github.com/vercel/sandbox#readme",
+          "checked": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "title": "Local and self-managed environments",
+      "projects": [
+        {
+          "name": "Agent Infra Sandbox",
+          "url": "https://github.com/agent-infra/sandbox",
+          "description": "Docker environment combining browser, shell, files, MCP, and a VS Code server.",
+          "kind": "Container environment",
+          "source": "https://github.com/agent-infra/sandbox#readme",
+          "checked": "2026-09-29"
+        },
+        {
+          "name": "Anthropic Sandbox Runtime",
+          "url": "https://github.com/anthropics/sandbox-runtime",
+          "description": "Process-level tool for applying filesystem and network restrictions without a container.",
+          "kind": "Process restrictions",
+          "source": "https://github.com/anthropics/sandbox-runtime#readme",
+          "checked": "2026-09-29"
+        },
+        {
+          "name": "Browserless",
+          "url": "https://github.com/browserless/browserless",
+          "description": "Browser service deployable in Docker, with a hosted service also available.",
+          "kind": "Browser environment",
+          "source": "https://github.com/browserless/browserless#readme",
+          "checked": "2026-09-29"
+        },
+        {
+          "name": "Microsandbox",
+          "url": "https://github.com/superradcompany/microsandbox",
+          "description": "Programmable local microVM runtime for agent tools and other untrusted workloads.",
+          "kind": "Local VM runtime",
+          "source": "https://github.com/superradcompany/microsandbox#readme",
+          "checked": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "title": "Isolation building blocks",
+      "projects": [
+        {
+          "name": "Firecracker",
+          "url": "https://github.com/firecracker-microvm/firecracker",
+          "description": "Virtual machine monitor for building lightweight KVM microVM environments.",
+          "kind": "VM building block",
+          "source": "https://github.com/firecracker-microvm/firecracker#readme",
+          "checked": "2026-09-29"
+        },
+        {
+          "name": "gVisor",
+          "url": "https://github.com/google/gvisor",
+          "description": "Application kernel that interposes between containerized workloads and the host kernel.",
+          "kind": "Container isolation",
+          "source": "https://github.com/google/gvisor#readme",
+          "checked": "2026-09-29"
+        },
+        {
+          "name": "Kata Containers",
+          "url": "https://github.com/kata-containers/kata-containers",
+          "description": "Container runtime that runs workloads inside lightweight virtual machines.",
+          "kind": "VM-backed containers",
+          "source": "https://github.com/kata-containers/kata-containers#readme",
+          "checked": "2026-09-29"
+        }
+      ]
+    }
+  ],
+  "related": [
+    {
+      "name": "arjan/awesome-agent-sandboxes",
+      "url": "https://github.com/arjan/awesome-agent-sandboxes",
+      "description": "Code-execution sandboxing options for agents."
+    },
+    {
+      "name": "fishman/awesome-agent-sandbox",
+      "url": "https://github.com/fishman/awesome-agent-sandbox",
+      "description": "Portable sandboxes and local isolation tools."
+    },
+    {
+      "name": "msyvr/awesome-agent-sandboxes",
+      "url": "https://github.com/msyvr/awesome-agent-sandboxes",
+      "description": "Sandbox landscape and isolation guidance."
+    },
+    {
+      "name": "backblaze-labs/awesome-agent-infrastructure",
+      "url": "https://github.com/backblaze-labs/awesome-agent-infrastructure",
+      "description": "The surrounding storage, memory, and execution stack."
+    }
+  ],
+  "slug": "awesome-agent-sandboxes",
+  "checked": "2026-09-29"
+}
