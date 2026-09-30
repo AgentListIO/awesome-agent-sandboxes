@@ -17,77 +17,200 @@
       "fit": "Docker Sandboxes can passthrough-mount host files, or use clone mode so the host repo stays read-only.",
       "distinction": "The architecture page says passthrough shows the agent the actual host files at the same path, while clone mode mounts the host repo read-only and the agent works in a private clone.",
       "unknown": "Unknown: the cited page covers local sandboxes only.",
-      "source": "https://docs.docker.com/ai/sandboxes/architecture/"
+      "sources": [
+        {
+          "name": "Docker Sandboxes",
+          "url": "https://docs.docker.com/ai/sandboxes/architecture/"
+        }
+      ]
     },
     {
       "need": "Whether a hosted microVM page names its hypervisor.",
       "fit": "Vercel Sandbox names Firecracker. Deno Sandboxes and Blaxel document microVMs and do not name a hypervisor.",
-      "distinction": "Vercel documents each sandbox as a Firecracker microVM. The Deno docs index and the Blaxel homepage describe microVMs and do not name Firecracker or another monitor.",
-      "unknown": "Unknown: host setup for those microVMs is not stated on the Vercel README, the Deno docs index, or the Blaxel homepage.",
-      "source": "https://github.com/vercel/sandbox"
+      "distinction": "Vercel documents each sandbox as a Firecracker microVM. The Deno docs index and the Blaxel post describe microVMs and do not name a hypervisor.",
+      "unknown": "Unknown: host setup for those microVMs is not stated on the Vercel README, the Deno docs index, or the Blaxel post.",
+      "sources": [
+        {
+          "name": "Vercel Sandbox",
+          "url": "https://github.com/vercel/sandbox#readme"
+        },
+        {
+          "name": "Firecracker",
+          "url": "https://github.com/firecracker-microvm/firecracker#readme"
+        },
+        {
+          "name": "Deno Sandboxes",
+          "url": "https://docs.deno.com/sandbox/"
+        },
+        {
+          "name": "Blaxel",
+          "url": "https://www.baseten.co/blog/blaxel-is-joining-baseten-to-build-the-future-of-agentic-cloud/"
+        }
+      ]
     },
     {
       "need": "When a language-level interpreter is enough instead of a VM.",
       "fit": "Monty is a restricted Python interpreter. Docker Sandboxes and Deno Sandboxes are microVMs with a Linux filesystem.",
       "distinction": "Monty documents that filesystem, environment variables, and network do not exist inside the interpreter, and the host is reached only through functions and mounts you pass in.",
       "unknown": "Unknown: the Python subset and snapshot limits are on a docs page separate from this README.",
-      "source": "https://github.com/pydantic/monty"
+      "sources": [
+        {
+          "name": "Monty",
+          "url": "https://github.com/pydantic/monty#readme"
+        },
+        {
+          "name": "Docker Sandboxes",
+          "url": "https://docs.docker.com/ai/sandboxes/architecture/"
+        },
+        {
+          "name": "Deno Sandboxes",
+          "url": "https://docs.deno.com/sandbox/"
+        }
+      ]
     },
     {
       "need": "Where the browser runs, and whether the host names isolation.",
       "fit": "Browserbase is hosted. Browserless and Steel Browser document a Docker image and a cloud. AIO Sandbox shares one container with the shell.",
-      "distinction": "Browserbase's homepage names live view and session replay but not how long they are kept, and neither that page nor the docs intro names an isolation mechanism.",
+      "distinction": "Browserbase docs default logging and recording on. Enterprise zero-data retention does not persist session logs or video replay, while live view still streams. These pages do not name an isolation mechanism.",
       "unknown": "Unknown: the docs do not name an isolation mechanism. Default logging is on unless a session disables it.",
-      "source": "https://docs.browserbase.com/account/enterprise/zero-data-retention"
+      "sources": [
+        {
+          "name": "Browserbase",
+          "url": "https://docs.browserbase.com/account/enterprise/zero-data-retention"
+        },
+        {
+          "name": "Browserless",
+          "url": "https://github.com/browserless/browserless#readme"
+        },
+        {
+          "name": "Steel Browser",
+          "url": "https://github.com/steel-dev/steel-browser#readme"
+        },
+        {
+          "name": "AIO Sandbox",
+          "url": "https://github.com/agent-infra/sandbox#readme"
+        }
+      ]
     },
     {
       "need": "Whether sandbox files survive after the session ends.",
       "fit": "Deno Sandboxes are ephemeral by default and offer volumes. Docker Sandboxes keep in-sandbox files until sbx rm. Blaxel also sells volumes.",
       "distinction": "Deno documents ephemeral disk plus volumes. Docker keeps in-sandbox files until sbx rm, and a direct mount lives on the host. Blaxel sells volumes and says the sandbox root filesystem is wiped when destroyed.",
       "unknown": "Unknown: Deno volume behavior is on a linked page, not in the limits list.",
-      "source": "https://docs.deno.com/sandbox/"
+      "sources": [
+        {
+          "name": "Deno Sandboxes",
+          "url": "https://docs.deno.com/sandbox/"
+        },
+        {
+          "name": "Docker Sandboxes",
+          "url": "https://docs.docker.com/ai/sandboxes/architecture/"
+        },
+        {
+          "name": "Blaxel",
+          "url": "https://www.baseten.co/blog/blaxel-is-joining-baseten-to-build-the-future-of-agentic-cloud/"
+        }
+      ]
     },
     {
       "need": "How a real API credential can stay outside the guest.",
       "fit": "Docker Sandboxes and Deno Sandboxes substitute secrets on the way out. Runloop docs say gateways do not expose real credentials to the devbox.",
       "distinction": "Docker says the agent sees a sentinel and the host proxy inserts the real credential after the request leaves the microVM. Deno substitutes the real value only on outbound requests to approved hosts.",
       "unknown": "Unknown: whether guest code can later read the injected secret is not stated on these pages.",
-      "source": "https://docs.docker.com/ai/sandboxes/architecture/"
+      "sources": [
+        {
+          "name": "Docker Sandboxes",
+          "url": "https://docs.docker.com/ai/sandboxes/architecture/"
+        },
+        {
+          "name": "Deno Sandboxes",
+          "url": "https://docs.deno.com/sandbox/"
+        },
+        {
+          "name": "Runloop",
+          "url": "https://runloop.ai/"
+        }
+      ]
     },
     {
       "need": "Whether you want an isolation primitive or a product that uses one.",
       "fit": "gVisor, Firecracker, and Kata Containers are building blocks. Dormice names a gVisor executor. Kubernetes Agent Sandbox schedules onto gVisor or Kata Containers.",
       "distinction": "gVisor's README presents runsc as an OCI runtime for Docker and Kubernetes, and says gVisor is not a virtual machine and not a syscall filter. Those product entries name the primitive instead of being it.",
-      "unknown": "Unknown: Firecracker and Kata Containers pins were not rechecked against their current READMEs.",
-      "source": "https://github.com/google/gvisor"
+      "unknown": "Unknown which Firecracker or Kata Containers release a cluster should pin. Each README documents its own runtime.",
+      "sources": [
+        {
+          "name": "gVisor",
+          "url": "https://github.com/google/gvisor#readme"
+        },
+        {
+          "name": "Firecracker",
+          "url": "https://github.com/firecracker-microvm/firecracker#readme"
+        },
+        {
+          "name": "Kata Containers",
+          "url": "https://github.com/kata-containers/kata-containers#readme"
+        },
+        {
+          "name": "Dormice",
+          "url": "https://github.com/BitMiracle-AI/Dormice#readme"
+        },
+        {
+          "name": "Kubernetes Agent Sandbox",
+          "url": "https://github.com/kubernetes-sigs/agent-sandbox#readme"
+        }
+      ]
     },
     {
       "need": "Whether the public Daytona repository is still the product.",
       "fit": "Daytona is the hosted product name. Its public GitHub repository is no longer maintained.",
       "distinction": "As of June 2026, core development moved to a private codebase. The public repository gets no further updates, fixes, or releases, and stays public under the license pinned at v0.190.0.",
       "unknown": "Unknown: the private tree and what the hosted product runs now are not in this public repository.",
-      "source": "https://github.com/daytonaio/daytona"
+      "sources": [
+        {
+          "name": "Daytona",
+          "url": "https://github.com/daytonaio/daytona#readme"
+        }
+      ]
     },
     {
       "need": "Whether Blaxel continues after the Baseten acquisition.",
       "fit": "Blaxel remains the sandbox entry. The Baseten post says the product continues and does not change.",
       "distinction": "The 2026-09-10 post says Baseten has acquired Blaxel, Blaxel is continuing, the product does not change, and features will keep shipping. Each agent gets its own microVM, and persistent storage can outlive a run.",
-      "unknown": "Cited page covers this.",
-      "source": "https://www.baseten.co/blog/blaxel-is-joining-baseten-to-build-the-future-of-agentic-cloud/"
+      "unknown": "The post says Blaxel continues and the product does not change.",
+      "sources": [
+        {
+          "name": "Blaxel",
+          "url": "https://www.baseten.co/blog/blaxel-is-joining-baseten-to-build-the-future-of-agentic-cloud/"
+        }
+      ]
     },
     {
       "need": "How long a Deno sandbox lives and where its secrets go.",
       "fit": "Deno Sandboxes cap lifetime at 30 minutes and substitute secrets only for approved outbound hosts.",
-      "distinction": "The docs index, updated March 19, 2026, says Linux microVMs are ephemeral by default, with volumes, a lifetime up to 30 minutes, and 10 GB of ephemeral disk. It does not name Firecracker.",
+      "distinction": "The docs index, updated March 19, 2026, says Linux microVMs are ephemeral by default, with volumes, a lifetime up to 30 minutes, and 10 GB of ephemeral disk. It does not name a hypervisor.",
       "unknown": "Unknown: the hypervisor is unnamed here, and volume durability is on a linked page rather than the limits list.",
-      "source": "https://docs.deno.com/sandbox/"
+      "sources": [
+        {
+          "name": "Deno Sandboxes",
+          "url": "https://docs.deno.com/sandbox/"
+        }
+      ]
     },
     {
       "need": "What isolation mechanism E2B's README actually names.",
       "fit": "E2B documents cloud sandboxes and SDKs. Unlike Vercel Sandbox, the README does not name a hypervisor.",
       "distinction": "The README documents JavaScript and Python SDKs, a Code Interpreter package, a Desktop SDK, and self-hosting via a separate runtime repository and Terraform. It does not name a hypervisor, kernel, or snapshot format.",
       "unknown": "Unknown: the E2B README does not name the isolation mechanism, so none is inferred here.",
-      "source": "https://github.com/e2b-dev/E2B"
+      "sources": [
+        {
+          "name": "E2B",
+          "url": "https://github.com/e2b-dev/E2B#readme"
+        },
+        {
+          "name": "Vercel Sandbox",
+          "url": "https://github.com/vercel/sandbox#readme"
+        }
+      ]
     }
   ],
   "sections": [
