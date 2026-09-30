@@ -63,8 +63,8 @@
     },
     {
       "need": "Whether the public Daytona repository is still the product.",
-      "fit": "Daytona is the hosted product name. Its public GitHub repository says it is no longer maintained.",
-      "distinction": "As of June 2026, core development moved to a private codebase, the public tree gets no further fixes, and it stays public under the license pinned at v0.190.0.",
+      "fit": "Daytona is the hosted product name. Its public GitHub repository is no longer maintained.",
+      "distinction": "As of June 2026, core development moved to a private codebase. The public repository gets no further updates, fixes, or releases, and stays public under the license pinned at v0.190.0.",
       "unknown": "Unknown: the private tree and what the hosted product runs now are not in this public repository.",
       "source": "https://github.com/daytonaio/daytona"
     },
@@ -105,7 +105,7 @@
         {
           "name": "Daytona",
           "url": "https://www.daytona.io/",
-          "description": "Hosted environment for running generated code. This public repository is unmaintained. Core development moved to a private codebase in June 2026. The old tree remains public under the license pinned at v0.190.0, with no further fixes. The product site remains up. This entry does not cover the private tree.",
+          "description": "Hosted environment for running generated code. The public repository is no longer maintained. As of June 2026, core development moved to a private codebase. The repository receives no further updates, fixes, or releases, and stays public under the license pinned at v0.190.0, without support. The product site remains up.",
           "kind": "Sandbox platform",
           "source": "https://github.com/daytonaio/daytona#readme",
           "checked": "2026-09-30"
