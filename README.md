@@ -10,6 +10,10 @@
 
 12 projects · Upstream documentation checked 2026-09-29. Curated by [agentlist.io](https://www.agentlist.io).
 
+**Give your agent a place to work, with boundaries you can inspect.**
+
+Before leaving an agent to run code, decide which files, networks, and credentials it needs. Then decide what should survive the task. This list helps you compare execution environments and their building blocks; the word sandbox alone does not establish an isolation guarantee.
+
 Environments for running agent tools or untrusted code, plus the isolation runtimes used to build them. Browser automation libraries alone are excluded. A listing is not a security certification.
 
 ## Contents
@@ -24,9 +28,14 @@ Environments for running agent tools or untrusted code, plus the isolation runti
 
 ## How to choose
 
-- What isolation boundary is used: process restrictions, containers, an application kernel, or a VM?
-- How are network access, credentials, filesystem access, and resource limits controlled?
-- Does state persist, and can you inspect, stop, snapshot, or destroy an environment?
+- Works with: Can your agent run the required commands, language runtimes, browser, and tools in this environment?
+- Runs where: Is execution on your machine, your infrastructure, or a hosted service? What isolation mechanism is documented?
+- Needs access to: How are filesystem mounts, outbound networking, and credentials restricted? What must you configure yourself?
+- Keeps what: Are files ephemeral or persistent? Can you snapshot, resume, export, and clean up an environment?
+- Human involvement: Can you inspect work, interrupt execution, and require approval before consequential actions?
+- Main limitation: Which workloads or threats fall outside the documented boundary? Check startup behavior, resource limits, and persistence against your task.
+
+Use these questions to narrow your shortlist. An entry’s source link records the documentation used for its description; it does not mean every question above has been answered or tested. Treat undocumented capabilities as unknown, and confirm requirements against the linked project before adopting it.
 
 ## Agent execution platforms
 
