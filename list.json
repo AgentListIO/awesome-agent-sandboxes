@@ -11,6 +11,208 @@
     "Human involvement: Can you inspect work, interrupt execution, and require approval before consequential actions?",
     "Main limitation: Which workloads or threats fall outside the documented boundary? Check startup behavior, resource limits, and persistence against your task."
   ],
+  "decisions": [
+    {
+      "need": "When a local microVM should see host files versus a private clone.",
+      "fit": "Docker Sandboxes can passthrough-mount host files, or use clone mode so the host repo stays read-only.",
+      "distinction": "The architecture page says passthrough shows the agent the actual host files at the same path, while clone mode mounts the host repo read-only and the agent works in a private clone.",
+      "unknown": "Unknown: the cited page covers local sandboxes only.",
+      "sources": [
+        {
+          "name": "Docker Sandboxes",
+          "url": "https://docs.docker.com/ai/sandboxes/architecture/"
+        }
+      ]
+    },
+    {
+      "need": "Whether a hosted microVM page names its hypervisor.",
+      "fit": "Vercel Sandbox names Firecracker. Deno Sandboxes and Blaxel document microVMs and do not name a hypervisor.",
+      "distinction": "Vercel documents each sandbox as a Firecracker microVM. The Deno docs index and the Blaxel post describe microVMs and do not name a hypervisor.",
+      "unknown": "Unknown: host setup for those microVMs is not stated on the Vercel README, the Deno docs index, or the Blaxel post.",
+      "sources": [
+        {
+          "name": "Vercel Sandbox",
+          "url": "https://github.com/vercel/sandbox#readme"
+        },
+        {
+          "name": "Firecracker",
+          "url": "https://github.com/firecracker-microvm/firecracker#readme"
+        },
+        {
+          "name": "Deno Sandboxes",
+          "url": "https://docs.deno.com/sandbox/"
+        },
+        {
+          "name": "Blaxel",
+          "url": "https://www.baseten.co/blog/blaxel-is-joining-baseten-to-build-the-future-of-agentic-cloud/"
+        }
+      ]
+    },
+    {
+      "need": "When a language-level interpreter is enough instead of a VM.",
+      "fit": "Monty is a restricted Python interpreter. Docker Sandboxes and Deno Sandboxes are microVMs with a Linux filesystem.",
+      "distinction": "Monty documents that filesystem, environment variables, and network do not exist inside the interpreter, and the host is reached only through functions and mounts you pass in.",
+      "unknown": "Unknown: the Python subset and snapshot limits are on a docs page separate from this README.",
+      "sources": [
+        {
+          "name": "Monty",
+          "url": "https://github.com/pydantic/monty#readme"
+        },
+        {
+          "name": "Docker Sandboxes",
+          "url": "https://docs.docker.com/ai/sandboxes/architecture/"
+        },
+        {
+          "name": "Deno Sandboxes",
+          "url": "https://docs.deno.com/sandbox/"
+        }
+      ]
+    },
+    {
+      "need": "Where the browser runs, and whether the host names isolation.",
+      "fit": "Browserbase is hosted. Browserless and Steel Browser document a Docker image and a cloud. AIO Sandbox shares one container with the shell.",
+      "distinction": "Browserbase docs default logging and recording on. Enterprise zero-data retention does not persist session logs or video replay, while live view still streams. These pages do not name an isolation mechanism.",
+      "unknown": "Unknown: the docs do not name an isolation mechanism. Default logging is on unless a session disables it.",
+      "sources": [
+        {
+          "name": "Browserbase",
+          "url": "https://docs.browserbase.com/account/enterprise/zero-data-retention"
+        },
+        {
+          "name": "Browserless",
+          "url": "https://github.com/browserless/browserless#readme"
+        },
+        {
+          "name": "Steel Browser",
+          "url": "https://github.com/steel-dev/steel-browser#readme"
+        },
+        {
+          "name": "AIO Sandbox",
+          "url": "https://github.com/agent-infra/sandbox#readme"
+        }
+      ]
+    },
+    {
+      "need": "Whether sandbox files survive after the session ends.",
+      "fit": "Deno Sandboxes are ephemeral by default and offer volumes. Docker Sandboxes keep in-sandbox files until sbx rm. Blaxel also sells volumes.",
+      "distinction": "Deno documents ephemeral disk plus volumes. Docker keeps in-sandbox files until sbx rm, and a direct mount lives on the host. Blaxel sells volumes and says the sandbox root filesystem is wiped when destroyed.",
+      "unknown": "Unknown: Deno volume behavior is on a linked page, not in the limits list.",
+      "sources": [
+        {
+          "name": "Deno Sandboxes",
+          "url": "https://docs.deno.com/sandbox/"
+        },
+        {
+          "name": "Docker Sandboxes",
+          "url": "https://docs.docker.com/ai/sandboxes/architecture/"
+        },
+        {
+          "name": "Blaxel",
+          "url": "https://www.baseten.co/blog/blaxel-is-joining-baseten-to-build-the-future-of-agentic-cloud/"
+        }
+      ]
+    },
+    {
+      "need": "How a real API credential can stay outside the guest.",
+      "fit": "Docker Sandboxes and Deno Sandboxes substitute secrets on the way out. Runloop docs say gateways do not expose real credentials to the devbox.",
+      "distinction": "Docker says the agent sees a sentinel and the host proxy inserts the real credential after the request leaves the microVM. Deno substitutes the real value only on outbound requests to approved hosts.",
+      "unknown": "Unknown: whether guest code can later read the injected secret is not stated on these pages.",
+      "sources": [
+        {
+          "name": "Docker Sandboxes",
+          "url": "https://docs.docker.com/ai/sandboxes/architecture/"
+        },
+        {
+          "name": "Deno Sandboxes",
+          "url": "https://docs.deno.com/sandbox/"
+        },
+        {
+          "name": "Runloop",
+          "url": "https://runloop.ai/"
+        }
+      ]
+    },
+    {
+      "need": "Whether you want an isolation primitive or a product that uses one.",
+      "fit": "gVisor, Firecracker, and Kata Containers are building blocks. Dormice names a gVisor executor. Kubernetes Agent Sandbox schedules onto gVisor or Kata Containers.",
+      "distinction": "gVisor's README presents runsc as an OCI runtime for Docker and Kubernetes, and says gVisor is not a virtual machine and not a syscall filter. Those product entries name the primitive instead of being it.",
+      "unknown": "Unknown which Firecracker or Kata Containers release a cluster should pin. Each README documents its own runtime.",
+      "sources": [
+        {
+          "name": "gVisor",
+          "url": "https://github.com/google/gvisor#readme"
+        },
+        {
+          "name": "Firecracker",
+          "url": "https://github.com/firecracker-microvm/firecracker#readme"
+        },
+        {
+          "name": "Kata Containers",
+          "url": "https://github.com/kata-containers/kata-containers#readme"
+        },
+        {
+          "name": "Dormice",
+          "url": "https://github.com/BitMiracle-AI/Dormice#readme"
+        },
+        {
+          "name": "Kubernetes Agent Sandbox",
+          "url": "https://github.com/kubernetes-sigs/agent-sandbox#readme"
+        }
+      ]
+    },
+    {
+      "need": "Whether the public Daytona repository is still the product.",
+      "fit": "Daytona is the hosted product name. Its public GitHub repository is no longer maintained.",
+      "distinction": "As of June 2026, core development moved to a private codebase. The public repository gets no further updates, fixes, or releases, and stays public under the license pinned at v0.190.0.",
+      "unknown": "Unknown: the private tree and what the hosted product runs now are not in this public repository.",
+      "sources": [
+        {
+          "name": "Daytona",
+          "url": "https://github.com/daytonaio/daytona#readme"
+        }
+      ]
+    },
+    {
+      "need": "Whether Blaxel continues after the Baseten acquisition.",
+      "fit": "Blaxel remains the sandbox entry. The Baseten post says the product continues and does not change.",
+      "distinction": "The 2026-09-10 post says Baseten has acquired Blaxel, Blaxel is continuing, the product does not change, and features will keep shipping. Each agent gets its own microVM, and persistent storage can outlive a run.",
+      "unknown": "The post says Blaxel continues and the product does not change.",
+      "sources": [
+        {
+          "name": "Blaxel",
+          "url": "https://www.baseten.co/blog/blaxel-is-joining-baseten-to-build-the-future-of-agentic-cloud/"
+        }
+      ]
+    },
+    {
+      "need": "How long a Deno sandbox lives and where its secrets go.",
+      "fit": "Deno Sandboxes cap lifetime at 30 minutes and substitute secrets only for approved outbound hosts.",
+      "distinction": "The docs index, updated March 19, 2026, says Linux microVMs are ephemeral by default, with volumes, a lifetime up to 30 minutes, and 10 GB of ephemeral disk. It does not name a hypervisor.",
+      "unknown": "Unknown: the hypervisor is unnamed here, and volume durability is on a linked page rather than the limits list.",
+      "sources": [
+        {
+          "name": "Deno Sandboxes",
+          "url": "https://docs.deno.com/sandbox/"
+        }
+      ]
+    },
+    {
+      "need": "What isolation mechanism E2B's README actually names.",
+      "fit": "E2B documents cloud sandboxes and SDKs. Unlike Vercel Sandbox, the README does not name a hypervisor.",
+      "distinction": "The README documents JavaScript and Python SDKs, a Code Interpreter package, a Desktop SDK, and self-hosting via a separate runtime repository and Terraform. It does not name a hypervisor, kernel, or snapshot format.",
+      "unknown": "Unknown: the E2B README does not name the isolation mechanism, so none is inferred here.",
+      "sources": [
+        {
+          "name": "E2B",
+          "url": "https://github.com/e2b-dev/E2B#readme"
+        },
+        {
+          "name": "Vercel Sandbox",
+          "url": "https://github.com/vercel/sandbox#readme"
+        }
+      ]
+    }
+  ],
   "sections": [
     {
       "title": "Agent execution platforms",
@@ -18,42 +220,199 @@
         {
           "name": "Cloudflare Sandbox SDK",
           "url": "https://github.com/cloudflare/sandbox-sdk",
-          "description": "SDK for executing commands and managing files in isolated containers from Workers applications.",
+          "description": "SDK that adds file copy, S3 mounts, and directory backup to a Cloudflare Container a Worker Durable Object starts. The Worker chooses the sandbox, internet access, and allowed hosts. Bucket credentials stay in the Worker, which signs storage requests. A directory backup can be restored into another container. Version 1.0 no longer runs commands for you.",
           "kind": "Cloud platform SDK",
           "source": "https://github.com/cloudflare/sandbox-sdk#readme",
-          "checked": "2026-09-29"
+          "checked": "2026-09-30"
         },
         {
           "name": "Daytona",
-          "url": "https://github.com/daytonaio/daytona",
-          "description": "Sandbox infrastructure with SDK and API access to code execution, files, and processes.",
+          "url": "https://www.daytona.io/",
+          "description": "Hosted environment for running generated code. The public repository is no longer maintained. As of June 2026, core development moved to a private codebase. The repository receives no further updates, fixes, or releases, and stays public under the license pinned at v0.190.0, without support. The product site remains up.",
           "kind": "Sandbox platform",
           "source": "https://github.com/daytonaio/daytona#readme",
-          "checked": "2026-09-29"
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Docker Sandboxes",
+          "url": "https://docs.docker.com/ai/sandboxes/",
+          "description": "Docker's architecture page describes local sbx sandboxes as microVMs, with a comparison row of Full (hypervisor): a workspace passthrough shows the agent the host files, clone mode keeps the host repo read-only while the agent works in a private clone, a host proxy leaves the real credential outside the guest, and in-sandbox files last until sbx rm. Cloud behavior is a different page.",
+          "kind": "Local or hosted",
+          "source": "https://docs.docker.com/ai/sandboxes/architecture/",
+          "checked": "2026-09-30"
         },
         {
           "name": "E2B",
           "url": "https://github.com/e2b-dev/E2B",
-          "description": "Cloud sandbox infrastructure with Python and JavaScript SDKs for running agent-generated code.",
+          "description": "Cloud service for running generated commands, with JavaScript and Python SDKs that need an API key. It includes a Code Interpreter package for runCode and a Desktop SDK for mouse, keyboard, screenshots, and streaming, plus self-hosting through a separate runtime repository and Terraform. It does not name the isolation mechanism or a snapshot format.",
           "kind": "Cloud sandbox",
           "source": "https://github.com/e2b-dev/E2B#readme",
-          "checked": "2026-09-29"
+          "checked": "2026-09-30"
         },
         {
           "name": "OpenSandbox",
           "url": "https://github.com/opensandbox-group/OpenSandbox",
-          "description": "Sandbox platform with lifecycle and execution APIs for Docker and Kubernetes environments.",
+          "description": "Sandbox server you can start on Docker and later run on Kubernetes, with one lifecycle API for commands, files, and code. It ships Python, Java, TypeScript, .NET, and Go SDKs, an osb CLI, and MCP, plus per-sandbox egress policy and a credential vault so a real secret need not sit in the workload. A Firecracker runtime with pause and resume is described for Kubernetes.",
           "kind": "Deployable platform",
           "source": "https://github.com/opensandbox-group/OpenSandbox#readme",
-          "checked": "2026-09-29"
+          "checked": "2026-09-30"
         },
         {
           "name": "Vercel Sandbox",
           "url": "https://github.com/vercel/sandbox",
-          "description": "SDK and tooling for ephemeral compute environments that run user-generated code.",
+          "description": "SDK and CLI for ephemeral Linux microVMs on Vercel's infrastructure. Each sandbox is a Firecracker microVM. You authenticate through a linked Vercel project. Duration defaults to five minutes. Hobby is 45 minutes, and Pro or Enterprise is 24 hours. You can seed a repository, run commands, and expose ports. This repository has no self-hosted server.",
           "kind": "Cloud sandbox",
           "source": "https://github.com/vercel/sandbox#readme",
-          "checked": "2026-09-29"
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "CubeSandbox",
+          "url": "https://github.com/TencentCloud/CubeSandbox",
+          "description": "Self-hosted sandbox service, built on RustVMM and KVM, for single-node or clustered microVMs. Each sandbox has its own kernel. The project ships an E2B-compatible API, a credential vault, volumes, and automatic pause and resume, with Terraform, a Kubernetes preview, or a QEMU virtual machine when KVM is missing. The main guide asks for x86_64 Linux with KVM.",
+          "kind": "Self-hosted microVM",
+          "source": "https://github.com/TencentCloud/CubeSandbox#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Kubernetes Agent Sandbox",
+          "url": "https://github.com/kubernetes-sigs/agent-sandbox",
+          "description": "Kubernetes controller for one long-lived pod with a stable hostname and optional storage. It is an orchestrator, not an isolation runtime. It schedules onto gVisor or Kata through a RuntimeClass you configure. Extensions add templates, a warm pool, and claims. Go and Python SDKs, plus pause and resume, are documented. This is not an agent product.",
+          "kind": "Kubernetes controller",
+          "source": "https://github.com/kubernetes-sigs/agent-sandbox#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "BoxLite",
+          "url": "https://github.com/boxlite-ai/boxlite",
+          "description": "Library that runs OCI images in microVMs on your machine, with an optional cloud control plane. Python, Node, Go, and Rust embeds can exec commands without a daemon. Isolation uses KVM or Hypervisor.framework plus an OS sandbox. Disk state persists. Secret placeholders keep real values out of the guest. An allow list can limit egress, and a hypervisor is required.",
+          "kind": "MicroVM runtime",
+          "source": "https://github.com/boxlite-ai/boxlite#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Beam",
+          "url": "https://github.com/beam-cloud/beta9",
+          "description": "Python API for isolated containers that run generated code, plus GPU inference endpoints and task queues. Beta9 is the open-source engine behind Beam's hosted cloud. You can self-host Beta9 or use the managed service with an account and beam-client. A sandbox is created in code and can run a snippet remotely. No separate export format is documented.",
+          "kind": "Serverless platform",
+          "source": "https://github.com/beam-cloud/beta9#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Celesto",
+          "url": "https://github.com/CelestoAI/celesto",
+          "description": "CLI and Python SDK for virtual machines that run commands, a browser, or a desktop, locally or in Celesto Cloud. macOS setup installs QEMU. Stop keeps files and delete removes them. Host mounts are read-only unless writable. Network is on by default. Linux Firecracker restricted networking cannot combine with host mounts. Presets include Claude Code and Codex. Snapshots are Linux-only.",
+          "kind": "Local or hosted VM",
+          "source": "https://github.com/CelestoAI/celesto#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "OpenShell",
+          "url": "https://github.com/NVIDIA/OpenShell",
+          "description": "Local gateway and CLI that start sandboxes and enforce policy on files, system calls, and network connections. Credentials are added only on approved endpoints. Policy changes can wait for review after a check. Compute can be Docker, Podman, or host virtualization on Linux, Apple Silicon, or experimental Windows WSL 2. SDKs call the gateway. Helm needs your CNI for NetworkPolicy.",
+          "kind": "Policy runtime",
+          "source": "https://github.com/NVIDIA/OpenShell#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Coder",
+          "url": "https://github.com/coder/coder",
+          "description": "Self-hosted platform for development workspaces and AI coding agents. Workspaces are Terraform templates on Docker, Kubernetes, or EC2, connected over a WireGuard tunnel. The Coder Agents loop runs in the control plane so model API keys are not placed in the workspace. Claude Code, Codex, and OpenCode are named. Idle shutdown is documented. Isolation is whatever the template provisions.",
+          "kind": "Dev environment platform",
+          "source": "https://github.com/coder/coder#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Sandcastle",
+          "url": "https://github.com/mattpocock/sandcastle",
+          "description": "TypeScript library that runs coding agents in Docker, Podman, or Vercel Sandbox and can merge their git commits back. noSandbox runs on the host with no container. Docker and Podman bind-mount the workspace, so Sandcastle does not add a boundary of its own. You need git and a provider. The scaffold expects a Claude credential in a local env file.",
+          "kind": "TypeScript orchestrator",
+          "source": "https://github.com/mattpocock/sandcastle#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Dormice",
+          "url": "https://github.com/BitMiracle-AI/Dormice",
+          "description": "Self-hosted sandbox daemon with a SQLite ledger, a Docker and gVisor executor, and a lifecycle that can freeze, stop, archive, and restore sandboxes. One key returns the same sandbox. Idle sandboxes cool down in place. The official E2B SDK can be pointed at Dormice by changing two URLs. The project marks this work as early development and not production-ready.",
+          "kind": "Self-hosted platform",
+          "source": "https://github.com/BitMiracle-AI/Dormice#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Modal Sandboxes",
+          "url": "https://modal.com/docs/guide/sandboxes",
+          "description": "Modal's Sandbox API starts containers for untrusted or generated code. You can select a gVisor runtime or a VM runtime. A sandbox stops after five minutes unless you set a timeout up to 24 hours. Filesystem snapshots can preserve state past that limit. There is no public server repository.",
+          "kind": "Hosted sandbox",
+          "source": "https://modal.com/docs/guide/sandboxes",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Sprites",
+          "url": "https://fly.io/sprites/",
+          "description": "Fly.io Sprites are hosted Linux environments for agents, with a disk that survives sleep and filesystem checkpoints. Connectors can call external services without placing the credential inside the Sprite. Fly describes Sprites as computers rather than sandboxes, with persistence coming from that surviving disk and the checkpoints.",
+          "kind": "Hosted agent computer",
+          "source": "https://fly.io/sprites/",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Deno Sandboxes",
+          "url": "https://deno.com/deploy/sandbox",
+          "description": "SDK for Linux microVMs on Deno Deploy. The docs index, last updated March 19, 2026, describes ephemeral sandboxes by default, volumes for durable storage, a lifetime of up to 30 minutes, and 10 GB of ephemeral disk. Secret values never enter the sandbox. They are substituted only on outbound requests to approved hosts.",
+          "kind": "Hosted sandbox",
+          "source": "https://docs.deno.com/sandbox/",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Blaxel",
+          "url": "https://blaxel.ai/",
+          "description": "Hosted agent runtime with one microVM per sandbox, persistent volumes, and a root filesystem wiped when the sandbox is destroyed. A Baseten post dated 2026-09-10 records that Baseten has acquired Blaxel, that Blaxel is continuing, that the product does not change, and that features will keep shipping.",
+          "kind": "Hosted sandbox",
+          "source": "https://www.baseten.co/blog/blaxel-is-joining-baseten-to-build-the-future-of-agentic-cloud/",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Runloop",
+          "url": "https://runloop.ai/",
+          "description": "Hosted code sandboxes for agents. The homepage calls a Devbox a micro-VM plus a container and describes snapshotting disk state and SSH, while the Devbox docs call them ephemeral virtual machines and say agent gateways connect without exposing real credentials to the devbox; Python and TypeScript SDKs are public.",
+          "kind": "Hosted sandbox",
+          "source": "https://runloop.ai/",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "SWE-ReX",
+          "url": "https://github.com/SWE-agent/SWE-ReX",
+          "description": "Python interface for agent shell sessions on the local machine, Docker, an AWS host, Modal, or Fargate. The same calls work across those backends, including interactive programs and several sessions at once. A Daytona extra is still work in progress. It has no isolation boundary, retention format, or approval step of its own. The boundary is the chosen backend's.",
+          "kind": "Execution interface",
+          "source": "https://github.com/SWE-agent/SWE-ReX#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "AgentScope Runtime",
+          "url": "https://github.com/agentscope-ai/agentscope-runtime",
+          "description": "Python runtime that deploys agent apps and runs tool calls in sandboxes for shell, Python, GUI, browser, files, or mobile. Deploy locally, on Kubernetes, or serverless. AgentScope, the Microsoft Agent Framework, and Agno are supported. LangGraph and AutoGen are only partly filled in. These capabilities moved into AgentScope 2.0. This read-only repository will be archived soon.",
+          "kind": "Agent runtime",
+          "source": "https://github.com/agentscope-ai/agentscope-runtime#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "OpenKruise Agents",
+          "url": "https://github.com/openkruise/agents",
+          "description": "Kubernetes operator from OpenKruise for agent sandbox lifecycle, with Kubernetes APIs and an E2B-style SDK. It pools resources, can hibernate and checkpoint memory and disk, and routes sessions without a Service for every user. It can use SIG agent-sandbox APIs when installed, so isolation depends on the cluster runtime. No standalone process is documented without Kubernetes.",
+          "kind": "Kubernetes operator",
+          "source": "https://github.com/openkruise/agents#readme",
+          "checked": "2026-09-30"
+        }
+      ]
+    },
+    {
+      "title": "Control APIs, not isolation boundaries",
+      "projects": [
+        {
+          "name": "Sandbox Agent",
+          "url": "https://github.com/rivet-dev/sandbox-agent",
+          "description": "HTTP API that runs inside a sandbox you already operate and drives Claude Code, Codex, OpenCode, Cursor, Amp, or Pi. It streams events and handles permission requests. It does not persist those sessions and it does not add an isolation boundary. Embedded mode can start the agents as local subprocesses.",
+          "kind": "Control API",
+          "source": "https://github.com/rivet-dev/sandbox-agent#readme",
+          "checked": "2026-09-30"
         }
       ]
     },
@@ -61,36 +420,161 @@
       "title": "Local and self-managed environments",
       "projects": [
         {
-          "name": "Agent Infra Sandbox",
+          "name": "AIO Sandbox",
           "url": "https://github.com/agent-infra/sandbox",
-          "description": "Docker environment combining browser, shell, files, MCP, and a VS Code server.",
+          "description": "One Docker image with a shell, files, browser and VNC, Jupyter, MCP, and VS Code on a shared filesystem, plus Python, JavaScript, and Go HTTP clients. Without an API key, services stay open on port 8080. The sample docker command sets seccomp unconfined, so bind it to localhost or a proxy. It is one container, not a kernel per task.",
           "kind": "Container environment",
           "source": "https://github.com/agent-infra/sandbox#readme",
-          "checked": "2026-09-29"
+          "checked": "2026-09-30"
         },
         {
           "name": "Anthropic Sandbox Runtime",
           "url": "https://github.com/anthropics/sandbox-runtime",
-          "description": "Process-level tool for applying filesystem and network restrictions without a container.",
+          "description": "srt applies filesystem and network rules to a process tree and is not a virtual machine. macOS uses sandbox-exec. Linux uses bubblewrap with the guest network namespace removed. Windows uses a local user and a firewall fence. Network stays denied until allowed domains, and traffic goes through host proxies. This research preview does not replace the OS sandbox it calls.",
           "kind": "Process restrictions",
           "source": "https://github.com/anthropics/sandbox-runtime#readme",
-          "checked": "2026-09-29"
-        },
-        {
-          "name": "Browserless",
-          "url": "https://github.com/browserless/browserless",
-          "description": "Browser service deployable in Docker, with a hosted service also available.",
-          "kind": "Browser environment",
-          "source": "https://github.com/browserless/browserless#readme",
-          "checked": "2026-09-29"
+          "checked": "2026-09-30"
         },
         {
           "name": "Microsandbox",
           "url": "https://github.com/superradcompany/microsandbox",
-          "description": "Programmable local microVM runtime for agent tools and other untrusted workloads.",
+          "description": "MicroVM runtime with an msb CLI and Python, TypeScript, Rust, and Go SDKs. It runs OCI images, can fork a live sandbox, and can snapshot and restore state, including detached sessions. A sample config allow-lists outbound hosts, and secrets need not enter the guest. It requires Apple Silicon, Linux KVM, or Windows WHP. The project is still called beta.",
           "kind": "Local VM runtime",
           "source": "https://github.com/superradcompany/microsandbox#readme",
-          "checked": "2026-09-29"
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Monty",
+          "url": "https://github.com/pydantic/monty",
+          "description": "Restricted Python interpreter in Rust, not a virtual machine. Filesystem, environment variables, and network do not exist inside. The host is reached only through functions and mounts you pass in. Packages exist for Python, JavaScript, and Rust. Full Monty is a separate commercial server behind a WebSocket. Snapshots and a Python subset are documented on the docs site.",
+          "kind": "Python interpreter",
+          "source": "https://github.com/pydantic/monty#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Agent Safehouse",
+          "url": "https://github.com/eugene1g/agent-safehouse",
+          "description": "macOS command that wraps coding agents with sandbox-exec profiles and a deny-first policy. Default access is narrower than a full home directory, and you add the paths and integrations the agent needs. Profiles exist for major coding agents. It is a Seatbelt layer, not a virtual machine, and not a boundary against a determined attacker. Linux is outside this tool.",
+          "kind": "macOS process sandbox",
+          "source": "https://github.com/eugene1g/agent-safehouse#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Fence",
+          "url": "https://github.com/fencesandbox/fence",
+          "description": "CLI that runs a command or a coding agent with network blocked unless a template allow-lists domains, plus filesystem and command rules you configure. macOS uses sandbox-exec and Linux uses bubblewrap. It can import Claude Code permissions and wrap Claude Code, Codex, and other CLIs. It adds no guest kernel. Windows is only via Nix on WSL.",
+          "kind": "Process restrictions",
+          "source": "https://github.com/fencesandbox/fence#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "CodeRunner",
+          "url": "https://github.com/instavm/coderunner",
+          "description": "Apple Silicon installer that starts a container you can stop and resume, keeping uploads and packages. It includes an MCP server, a Claude Desktop proxy, and a path for Claude Code. Network is open unless you set none mode at creation, and resume cannot change that mode. It uses Apple's container CLI. Hosted InstaVM is mentioned and not listed separately.",
+          "kind": "Local container sandbox",
+          "source": "https://github.com/instavm/coderunner#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Vibe",
+          "url": "https://github.com/lynaghk/vibe",
+          "description": "Binary that boots a Linux VM on Apple Silicon and mounts the project into the guest. Mounts include Claude and Codex read-write unless changed. The guest reaches the host at a fixed address. The host cannot reach the guest, and guests cannot reach each other. The VM exits with the shell. It needs macOS 13 or newer on ARM.",
+          "kind": "macOS VM",
+          "source": "https://github.com/lynaghk/vibe#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "forkd",
+          "url": "https://github.com/deeplethe/forkd",
+          "description": "Linux daemon that boots one Firecracker parent microVM, then starts copy-on-write child microVMs. It includes a REST API plus Python, TypeScript, and MCP clients, and a branch operation that snapshots a running sandbox and resumes it. Each child is its own KVM virtual machine. You supply the warmed parent on Linux. Documented CLI examples use sudo.",
+          "kind": "MicroVM runtime",
+          "source": "https://github.com/deeplethe/forkd#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Shuru",
+          "url": "https://github.com/superhq-ai/shuru",
+          "description": "Local microVM CLI for agents, using Apple's Virtualization framework on macOS and experimental KVM on Linux ARM64. Each run resets the root filesystem. Network stays off until you allow hosts. Secrets stay on the host, with proxy substitution. Read-write mounts write to the host. Checkpoints can save disk. Linux is not production-ready, and Apple Silicon is the supported Mac path.",
+          "kind": "Local microVM",
+          "source": "https://github.com/superhq-ai/shuru#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Coi",
+          "url": "https://github.com/coipond/coi",
+          "description": "CLI that starts an Incus system container with root, systemd, and Docker, and runs Claude Code, Codex, or another CLI. The project mounts to the host with your ownership. SSH keys and environment variables stay out unless forwarded. Network can be open, restricted, or allow-listed. It needs Linux with Incus, macOS via Colima or Lima, and shares the host kernel.",
+          "kind": "Incus containers",
+          "source": "https://github.com/coipond/coi#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Matchlock",
+          "url": "https://github.com/jingkaihe/matchlock",
+          "description": "CLI and Go, Python, and TypeScript SDKs that launch ephemeral Linux microVMs for an agent command. An allow-host or secret seals the network, and a host proxy injects the real credential so the guest sees a placeholder. Overlays are discarded when the VM goes away. It needs Linux with KVM or Apple Silicon and is experimental, with breaking changes.",
+          "kind": "Local microVM",
+          "source": "https://github.com/jingkaihe/matchlock#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Sandlock",
+          "url": "https://github.com/multikernel/sandlock",
+          "description": "Linux process sandbox using Landlock, seccomp-bpf, and seccomp user notifications. It uses no container, no virtual machine, and no root. Optional copy-on-write is available, and network filters can match a host and an HTTP path. Python and Go SDKs and an OCI shim are included. Full filesystem, network, and IPC rules need Linux 6.12. The process shares the host kernel.",
+          "kind": "Process sandbox",
+          "source": "https://github.com/multikernel/sandlock#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "AgentBox",
+          "url": "https://github.com/madarco/agentbox",
+          "description": "CLI that launches Claude Code or another agent in a local or cloud box. Locally it is a Docker container with a FUSE overlay, even where the introduction calls it a VM. Cloud targets include Hetzner, Vercel, Daytona, E2B, and DigitalOcean. Git credentials stay on the starting machine, with a permission request before push. You need Docker and Node.",
+          "kind": "Local or cloud boxes",
+          "source": "https://github.com/madarco/agentbox#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Gondolin",
+          "url": "https://github.com/earendil-works/gondolin",
+          "description": "Experimental TypeScript control plane that boots a local Linux microVM, QEMU by default, with an optional krun backend. Host-side HTTP hooks allow only named hosts and inject secrets, so the guest sees a placeholder. A CLI can attach a shell, open ingress, and snapshot a session. The snapshot command stops the VM. Filesystem modes include read-only, memory, and copy-on-write.",
+          "kind": "Local microVM",
+          "source": "https://github.com/earendil-works/gondolin#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "LLM Sandbox",
+          "url": "https://github.com/vndee/llm-sandbox",
+          "description": "Python library that runs model-written code in Docker, Podman, or Kubernetes. Sessions cover Python, JavaScript, Java, C++, Go, and R, and a Python kernel keeps state across calls. File copy and an MCP server are included. Limits and network controls are session settings, not a separate hypervisor, so isolation is the backend's. No hosted service or approval step is documented.",
+          "kind": "Python library",
+          "source": "https://github.com/vndee/llm-sandbox#readme",
+          "checked": "2026-09-30"
+        }
+      ]
+    },
+    {
+      "title": "Browser environments",
+      "projects": [
+        {
+          "name": "Browserless",
+          "url": "https://github.com/browserless/browserless",
+          "description": "Docker images that serve Chromium, Firefox, or WebKit over WebSocket for Puppeteer or Playwright, plus a hosted cloud for the same API. It documents a debug viewer, session replay, an MCP server, and persistent browser state with retention. Your script stays in your process. The browser runs in the container or on their cloud. Self-hosted and enterprise images differ.",
+          "kind": "Browser environment",
+          "source": "https://github.com/browserless/browserless#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Steel Browser",
+          "url": "https://github.com/steel-dev/steel-browser",
+          "description": "Browser API for Docker or Steel Cloud. Sessions accept Puppeteer, Playwright, or Selenium. The server keeps cookies and local storage, can add proxies and extensions, and ships a UI for sessions and request logs. A REST API can return markdown, screenshots, or PDFs. The project calls itself a public beta, and you still bring the agent logic.",
+          "kind": "Browser environment",
+          "source": "https://github.com/steel-dev/steel-browser#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Browserbase",
+          "url": "https://www.browserbase.com/",
+          "description": "Hosted browsers for agents, with search and fetch APIs beside the browser sessions. You authenticate with an API key and the browser runs on their cloud. Docs default logSession and recordSession to true. Enterprise zero-data retention does not persist session logs or video replay, while live view still streams. These pages do not name an isolation mechanism. Stagehand is not listed.",
+          "kind": "Hosted browsers",
+          "source": "https://docs.browserbase.com/account/enterprise/zero-data-retention",
+          "checked": "2026-09-30"
         }
       ]
     },
@@ -100,26 +584,26 @@
         {
           "name": "Firecracker",
           "url": "https://github.com/firecracker-microvm/firecracker",
-          "description": "Virtual machine monitor for building lightweight KVM microVM environments.",
+          "description": "Virtual machine monitor that uses Linux KVM to run small microVMs with a reduced device model. You provide the kernel, root filesystem, memory, network interfaces, disks, and sockets. It is a building block for multi-tenant container and function hosts, not an agent product. Other runtimes such as Kata integrate it. Isolation also depends on the production host setup.",
           "kind": "VM building block",
           "source": "https://github.com/firecracker-microvm/firecracker#readme",
-          "checked": "2026-09-29"
+          "checked": "2026-09-30"
         },
         {
           "name": "gVisor",
           "url": "https://github.com/google/gvisor",
-          "description": "Application kernel that interposes between containerized workloads and the host kernel.",
+          "description": "User-space kernel, written in Go, so a container makes fewer calls into the host. runsc is its OCI runtime for Docker and Kubernetes. gVisor is not a syscall filter and not a virtual machine in the everyday sense. It is a building block, not an agent product. It does not choose mounted files or credentials. Builds target x86_64 and ARM64.",
           "kind": "Container isolation",
           "source": "https://github.com/google/gvisor#readme",
-          "checked": "2026-09-29"
+          "checked": "2026-09-30"
         },
         {
           "name": "Kata Containers",
           "url": "https://github.com/kata-containers/kata-containers",
-          "description": "Container runtime that runs workloads inside lightweight virtual machines.",
+          "description": "Runtime that places workloads in lightweight virtual machines behind a guest kernel. Container managers launch it. An agent runs in the virtual machine, and Dragonball is an optional built-in VMM. It supports 64-bit x86, Arm, Power, and IBM Z with hardware virtualization. Kata is a building block, not an agent product. You choose the image, network, and mounts.",
           "kind": "VM-backed containers",
           "source": "https://github.com/kata-containers/kata-containers#readme",
-          "checked": "2026-09-29"
+          "checked": "2026-09-30"
         }
       ]
     }
@@ -128,25 +612,35 @@
     {
       "name": "arjan/awesome-agent-sandboxes",
       "url": "https://github.com/arjan/awesome-agent-sandboxes",
-      "description": "Code-execution sandboxing options for agents."
+      "description": "Short list of code-execution sandboxes for agents."
     },
     {
       "name": "fishman/awesome-agent-sandbox",
       "url": "https://github.com/fishman/awesome-agent-sandbox",
-      "description": "Portable sandboxes and local isolation tools."
+      "description": "Local microVM, container, and process-sandbox catalog. Its default branch is master. Rows come from each project's own docs."
     },
     {
       "name": "msyvr/awesome-agent-sandboxes",
       "url": "https://github.com/msyvr/awesome-agent-sandboxes",
-      "description": "Sandbox landscape and isolation guidance."
+      "description": "Another curated sandbox link list. Confirm currency before treating it as coverage of the vendors here."
     },
     {
       "name": "backblaze-labs/awesome-agent-infrastructure",
       "url": "https://github.com/backblaze-labs/awesome-agent-infrastructure",
-      "description": "The surrounding storage, memory, and execution stack."
+      "description": "Cross-cutting agent infrastructure list covering memory, sandboxes, MCP, and evaluation. Thin on any single category."
+    },
+    {
+      "name": "tizkovatereza/awesome-ai-sandboxes",
+      "url": "https://github.com/tizkovatereza/awesome-ai-sandboxes",
+      "description": "Notes on hosted sandbox vendors, drawn from official pages rather than install tests."
+    },
+    {
+      "name": "fhiltscher/awesome-ai-coding-sandboxes",
+      "url": "https://github.com/fhiltscher/awesome-ai-coding-sandboxes",
+      "description": "Coding-agent sandboxes ordered by the author's view of isolation and egress. Those rankings are opinions, not a certification."
     }
   ],
   "slug": "awesome-agent-sandboxes",
-  "checked": "2026-09-29",
+  "checked": "2026-09-30",
   "introduction": "Before leaving an agent to run code, decide which files, networks, and credentials it needs. Then decide what should survive the task. This list helps you compare execution environments and their building blocks; the word sandbox alone does not establish an isolation guarantee."
 }
