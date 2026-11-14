@@ -378,6 +378,14 @@
           "checked": "2026-09-30"
         },
         {
+          "name": "SandBase Sandbox",
+          "url": "https://www.sandbase.ai/sandbox",
+          "description": "Hosted execution environments accessed through an E2B-compatible API using a SandBase API key. Agents can start a workspace from a template, execute shell commands, read and write files, and stop the workspace when the task ends. Network controls and pause and resume support vary by provider and template.",
+          "kind": "Hosted sandbox",
+          "source": "https://www.sandbase.ai/sandbox",
+          "checked": "2026-11-14"
+        },
+        {
           "name": "SWE-ReX",
           "url": "https://github.com/SWE-agent/SWE-ReX",
           "description": "Python interface for agent shell sessions on the local machine, Docker, an AWS host, Modal, or Fargate. The same calls work across those backends, including interactive programs and several sessions at once. A Daytona extra is still work in progress. It has no isolation boundary, retention format, or approval step of its own. The boundary is the chosen backend's.",
